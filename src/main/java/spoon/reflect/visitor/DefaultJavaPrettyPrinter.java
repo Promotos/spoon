@@ -1236,8 +1236,11 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 			if (thenStmt != null) {
 				SourcePosition thenPosition = thenStmt.getPosition();
 				if (!thenPosition.isValidPosition() && thenStmt instanceof CtBlock) {
-					final CtStatement thenExpression = ((CtBlock) thenStmt).getStatement(0);
-					thenPosition = thenExpression.getPosition();
+					final CtBlock<?> thenBlockStmt = (CtBlock<?>) thenStmt;
+					if (!thenBlockStmt.getStatements().isEmpty()) {
+						final CtStatement thenExpression = ((CtBlock<?>) thenStmt).getStatement(0);
+						thenPosition = thenExpression.getPosition();
+					}
 				}
 				for (final CtComment comment : comments) {
 					if (comment.getPosition().getSourceStart() > thenPosition.getSourceEnd()) {
